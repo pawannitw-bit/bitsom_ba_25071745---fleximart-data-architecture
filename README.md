@@ -1,58 +1,135 @@
-FlexiMart Data Architecture Project
-Student Name: Pawan Kulmi  
-Student ID: bitsom_ba_25071745  
-Email: pawannitw@gmail.com
-Date: 05-Jan-2026
-## Project Overview
-This project demonstrates the end-to-end data architecture design for FlexiMart, covering transactional ETL processing, NoSQL-based product catalog analysis, and a dimensional data warehouse for analytical reporting. The solution includes data cleaning, schema design, MongoDB operations, star schema modeling, and OLAP analytics to support business decision-making.
+Part 2 – NoSQL Product Catalog (MongoDB)
+📌 Overview
 
-## Repository Structure
-├── part1-database-etl/
-│   ├── etl_pipeline.py
-│   ├── schema_documentation.md
-│   ├── business_queries.sql
-│   └── data_quality_report.txt
-├── part2-nosql/
-│   ├── nosql_analysis.md
-│   ├── mongodb_operations.js
-│   └── products_catalog.json
-├── part3-datawarehouse/
-│   ├── star_schema_design.md
-│   ├── warehouse_schema.sql
-│   ├── warehouse_data.sql
-│   └── analytics_queries.sql
-└── README.md
+Part 2 of this project focuses on designing and implementing a NoSQL data model using MongoDB to store a rich, semi-structured product catalog.
 
-## Technologies Used
-- **Python 3.x**, pandas, mysql-connector-python  
-- **MySQL 8.0 / PostgreSQL 14**  
-- **MongoDB 6.0**
+Unlike Part 1 (relational ETL in MySQL), this part demonstrates how MongoDB efficiently handles nested and hierarchical product data such as specifications, reviews, tags, and metadata.
 
-Setup Instructions
-(As provided in the assignment)
+🎯 Objectives
 
-# Create databases
-mysql -u root -p -e "CREATE DATABASE fleximart;"
-mysql -u root -p -e "CREATE DATABASE fleximart_dw;"
+Design a document-based data model
 
-# Run Part 1 - ETL Pipeline
-python part1-database-etl/etl_pipeline.py
+Store complex product information in MongoDB
 
-# Run Part 1 - Business Queries
-mysql -u root -p fleximart < part1-database-etl/business_queries.sql
+Leverage nested documents and arrays
 
-# Run Part 3 - Data Warehouse Schema and Data
-mysql -u root -p fleximart_dw < part3-datawarehouse/warehouse_schema.sql
-mysql -u root -p fleximart_dw < part3-datawarehouse/warehouse_data.sql
-mysql -u root -p fleximart_dw < part3-datawarehouse/analytics_queries.sql
+Support flexible and scalable product catalog queries
 
-mongosh < part2-nosql/mongodb_operations.js
+📂 Input Dataset
+File	Description
+products_catalog.json	Product catalog with nested attributes and reviews
+🧱 Data Model Design
+Collection: products_catalog
 
-Key Learnings
-⦁	End-to-End Data Architecture Understanding
-⦁	Handling Data Variety and Quality
-⦁	Analytical Thinking with Dimensional Modeling
-Challenges Faced
-1.	Data Quality and Inconsistency
-2.	Schema Design Across Multiple Data Models
-3.	Writing Efficient Analytical Queries
+Each document represents one product and contains:
+
+Product metadata
+
+Nested specifications
+
+Embedded customer reviews
+
+Tags for search and filtering
+
+Timestamps for auditing
+
+📄 Document Structure
+{
+  "product_id": "ELEC001",
+  "name": "Samsung Galaxy S21 Ultra",
+  "category": "Electronics",
+  "subcategory": "Smartphones",
+  "price": 79999.00,
+  "stock": 150,
+  "specifications": { },
+  "reviews": [ ],
+  "tags": [ ],
+  "warranty_months": 12,
+  "created_at": "ISODate",
+  "updated_at": "ISODate"
+}
+
+🔍 Key Design Decisions
+✅ Embedded Documents
+
+Specifications and reviews are embedded for fast read performance
+
+Avoids expensive joins required in relational databases
+
+✅ Flexible Schema
+
+Different products can have different specifications
+
+Supports easy addition of new attributes without schema changes
+
+✅ Read-Optimized Model
+
+Optimized for product browsing, filtering, and analytics
+
+Ideal for high-read e-commerce workloads
+
+🛠️ Technologies Used
+
+MongoDB
+
+JSON
+
+MongoDB Compass / Mongo Shell
+
+Python (optional for loading)
+
+▶️ How to Load Data
+Using Mongo Shell
+use ecommerce_db
+db.products_catalog.insertMany(require('./products_catalog.json'))
+
+Using MongoDB Compass
+
+Open MongoDB Compass
+
+Select database: ecommerce_db
+
+Select collection: products_catalog
+
+Import products_catalog.json
+
+🔎 Sample Queries
+Find All Electronics Products
+db.products_catalog.find(
+  { category: "Electronics" },
+  { name: 1, price: 1, stock: 1 }
+)
+
+Find Products with Rating ≥ 4
+db.products_catalog.find({
+  "reviews.rating": { $gte: 4 }
+})
+
+Find Products by Tag
+db.products_catalog.find({
+  tags: "smartphone"
+})
+
+📈 Use Cases
+
+Product browsing and search
+
+Review analysis
+
+Recommendation systems
+
+Catalog analytics
+
+🔮 Future Enhancements
+
+Add indexing on category, price, and tags
+
+Implement text search
+
+Integrate with real-time recommendation engine
+
+Add versioning for product updates
+
+👤 Author
+
+Pawan Kulmi

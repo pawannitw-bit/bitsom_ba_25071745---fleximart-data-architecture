@@ -1,0 +1,22 @@
+[
+  {
+    "product_id": "ELEC001",
+    "name": "Samsung Galaxy S21",
+    "category": "Electronics",
+    "price": 79999,
+    "stock": 150,
+    "specs": { "ram": "8GB", "storage": "128GB" },
+    "reviews": [
+      { "user": "U001", "rating": 5, "comment": "Great!", "date": "2024-01-15" }
+    ]
+  },
+  {
+    "product_id": "ELEC002",
+    "name": "Dell Inspiron",
+    "category": "Electronics",
+    "price": 55999,
+    "stock": 80,
+    "specs": { "ram": "16GB", "processor": "i7" },
+    "reviews": []
+  }
+]
