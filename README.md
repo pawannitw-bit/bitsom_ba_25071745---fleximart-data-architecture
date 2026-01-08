@@ -1,58 +1,167 @@
-FlexiMart Data Architecture Project
-Student Name: Pawan Kulmi  
-Student ID: bitsom_ba_25071745  
-Email: pawannitw@gmail.com
-Date: 05-Jan-2026
-## Project Overview
-This project demonstrates the end-to-end data architecture design for FlexiMart, covering transactional ETL processing, NoSQL-based product catalog analysis, and a dimensional data warehouse for analytical reporting. The solution includes data cleaning, schema design, MongoDB operations, star schema modeling, and OLAP analytics to support business decision-making.
+Part 1 – ETL Pipeline & Data Quality (MySQL)
+Overview
 
-## Repository Structure
-├── part1-database-etl/
-│   ├── etl_pipeline.py
-│   ├── schema_documentation.md
-│   ├── business_queries.sql
-│   └── data_quality_report.txt
-├── part2-nosql/
-│   ├── nosql_analysis.md
-│   ├── mongodb_operations.js
-│   └── products_catalog.json
-├── part3-datawarehouse/
-│   ├── star_schema_design.md
-│   ├── warehouse_schema.sql
-│   ├── warehouse_data.sql
-│   └── analytics_queries.sql
-└── README.md
+Part 1 of this project focuses on building a robust ETL (Extract, Transform, Load) pipeline for an e-commerce system using raw CSV datasets.
+The goal is to identify data quality issues, clean and standardize the data, and load it into a relational database (MySQL).
 
-## Technologies Used
-- **Python 3.x**, pandas, mysql-connector-python  
-- **MySQL 8.0 / PostgreSQL 14**  
-- **MongoDB 6.0**
+This part simulates real-world production data challenges such as missing values, duplicates, and inconsistent formats.
 
-Setup Instructions
-(As provided in the assignment)
+ Input Datasets
+Dataset	Description
+customers_raw.csv	Customer master data
+products_raw.csv	Product master data
+sales_raw.csv	Transactional sales data
 
-# Create databases
-mysql -u root -p -e "CREATE DATABASE fleximart;"
-mysql -u root -p -e "CREATE DATABASE fleximart_dw;"
+🧹 Data Quality Challenges
+Customers Data
 
-# Run Part 1 - ETL Pipeline
-python part1-database-etl/etl_pipeline.py
+Missing email addresses
 
-# Run Part 1 - Business Queries
-mysql -u root -p fleximart < part1-database-etl/business_queries.sql
+Duplicate customer records
 
-# Run Part 3 - Data Warehouse Schema and Data
-mysql -u root -p fleximart_dw < part3-datawarehouse/warehouse_schema.sql
-mysql -u root -p fleximart_dw < part3-datawarehouse/warehouse_data.sql
-mysql -u root -p fleximart_dw < part3-datawarehouse/analytics_queries.sql
+Inconsistent phone number formats
 
-mongosh < part2-nosql/mongodb_operations.js
+Mixed date formats
 
-Key Learnings
-⦁	End-to-End Data Architecture Understanding
-⦁	Handling Data Variety and Quality
-⦁	Analytical Thinking with Dimensional Modeling
-Challenges Faced
-1.	Data Quality and Inconsistency
-2.	Schema Design Across Multiple Data Models
-3.	Writing Efficient Analytical Queries
+Inconsistent city casing
+
+Products Data
+
+Missing prices
+
+Missing stock quantities
+
+Inconsistent category values
+
+Extra spaces in product names
+
+Sales Data
+
+Duplicate transactions
+
+Missing customer IDs
+
+Missing product IDs
+
+Multiple date formats
+
+ Data Quality Checks
+
+Before loading, the following checks are performed:
+
+Duplicate record detection
+
+Missing value identification
+
+Date format validation and normalization
+
+Category standardization
+
+Phone number normalization
+
+Referential integrity validation for sales data
+
+📄 Detailed findings are documented in:
+reports/data_quality_report.txt
+
+🔄 ETL Pipeline Flow
+1️⃣ Extract
+
+Read raw CSV files using Python
+
+Load data into pandas DataFrames
+
+2️⃣ Transform
+
+Remove duplicate records
+
+Standardize date formats to YYYY-MM-DD
+
+Normalize phone numbers
+
+Clean and trim text fields
+
+Normalize category values
+
+Handle missing and null values
+
+Validate foreign key relationships
+
+3️⃣ Load
+
+Load cleaned data into MySQL
+
+Store customers, products, and sales in relational tables
+
+🗄️ Database Design
+
+Database: ecommerce_db
+
+Tables
+
+customers
+
+products
+
+sales
+
+Refer to:
+📘 schema_documentation.md for full schema details.
+
+🛠️ Technologies Used
+
+Python (pandas)
+
+MySQL
+
+SQL
+
+Git
+
+▶️ How to Run Part 1
+
+Clone the repository
+
+git clone <repo-url>
+cd part1-etl-mysql
+
+
+Create database and tables
+
+source sql/create_tables.sql;
+
+
+Run ETL pipeline
+
+python etl/etl_pipeline.py
+
+
+Verify loaded data
+
+SELECT COUNT(*) FROM customers;
+SELECT COUNT(*) FROM products;
+SELECT COUNT(*) FROM sales;
+
+📈 Outcomes
+
+Raw data transformed into clean, analytics-ready tables
+
+Improved data consistency and integrity
+
+Clear documentation of data quality issues
+
+Production-style ETL workflow
+
+🔮 Future Improvements
+
+Add automated data validation checks
+
+Introduce incremental loads
+
+Implement Airflow for scheduling
+
+Add indexes for performance optimization
+
+👤 Author
+
+Pawan Kulmi
