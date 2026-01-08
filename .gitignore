@@ -1,0 +1,74 @@
+# ===============================
+# Python
+# ===============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# ===============================
+# Environment & Secrets
+# ===============================
+.env
+.env.*
+*.key
+*.pem
+*.crt
+
+# ===============================
+# IDE / Editor
+# ===============================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+
+# ===============================
+# OS Files
+# ===============================
+.DS_Store
+Thumbs.db
+
+# ===============================
+# Logs & Temp Files
+# ===============================
+*.log
+*.tmp
+
+# ===============================
+# Database Dumps
+# ===============================
+*.sql
+*.dump
+*.db
+
+# ===============================
+# Jupyter / Data Science
+# ===============================
+.ipynb_checkpoints/
+
+# ===============================
+# Large Data Files (optional)
+# Uncomment if raw data should not be tracked
+# ===============================
+# data/*.csv
+# data/*.json
+
+# ===============================
+# Test & Coverage
+# ===============================
+.coverage
+htmlcov/
+.pytest_cache/
+
+# ========================
