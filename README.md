@@ -1,58 +1,137 @@
-FlexiMart Data Architecture Project
-Student Name: Pawan Kulmi  
-Student ID: bitsom_ba_25071745  
-Email: pawannitw@gmail.com
-Date: 05-Jan-2026
-## Project Overview
-This project demonstrates the end-to-end data architecture design for FlexiMart, covering transactional ETL processing, NoSQL-based product catalog analysis, and a dimensional data warehouse for analytical reporting. The solution includes data cleaning, schema design, MongoDB operations, star schema modeling, and OLAP analytics to support business decision-making.
+Part 3 – Data Analysis & Business Reporting
+📌 Overview
 
-## Repository Structure
-├── part1-database-etl/
-│   ├── etl_pipeline.py
-│   ├── schema_documentation.md
-│   ├── business_queries.sql
-│   └── data_quality_report.txt
-├── part2-nosql/
-│   ├── nosql_analysis.md
-│   ├── mongodb_operations.js
-│   └── products_catalog.json
-├── part3-datawarehouse/
-│   ├── star_schema_design.md
-│   ├── warehouse_schema.sql
-│   ├── warehouse_data.sql
-│   └── analytics_queries.sql
-└── README.md
+Part 3 focuses on analyzing cleaned and structured data produced in Part 1 and Part 2 to generate business insights and reports.
 
-## Technologies Used
-- **Python 3.x**, pandas, mysql-connector-python  
-- **MySQL 8.0 / PostgreSQL 14**  
-- **MongoDB 6.0**
+This phase demonstrates how data engineering outputs are consumed by analytics, supporting decision-making for sales, customers, and inventory management in an e-commerce environment.
 
-Setup Instructions
-(As provided in the assignment)
+🎯 Objectives
 
-# Create databases
-mysql -u root -p -e "CREATE DATABASE fleximart;"
-mysql -u root -p -e "CREATE DATABASE fleximart_dw;"
+Perform analytical queries on cleaned data
 
-# Run Part 1 - ETL Pipeline
-python part1-database-etl/etl_pipeline.py
+Generate business-focused metrics
 
-# Run Part 1 - Business Queries
-mysql -u root -p fleximart < part1-database-etl/business_queries.sql
+Validate data consistency post-ETL
 
-# Run Part 3 - Data Warehouse Schema and Data
-mysql -u root -p fleximart_dw < part3-datawarehouse/warehouse_schema.sql
-mysql -u root -p fleximart_dw < part3-datawarehouse/warehouse_data.sql
-mysql -u root -p fleximart_dw < part3-datawarehouse/analytics_queries.sql
+Produce summary reports for stakeholders
 
-mongosh < part2-nosql/mongodb_operations.js
+📂 Data Sources
+Source	Description
+MySQL	Customers, Products, Sales (cleaned)
+MongoDB	Product catalog with specifications and reviews
+📊 Key Analytics Areas
+1️⃣ Sales Analysis
 
-Key Learnings
-⦁	End-to-End Data Architecture Understanding
-⦁	Handling Data Variety and Quality
-⦁	Analytical Thinking with Dimensional Modeling
-Challenges Faced
-1.	Data Quality and Inconsistency
-2.	Schema Design Across Multiple Data Models
-3.	Writing Efficient Analytical Queries
+Total revenue
+
+Monthly sales trends
+
+Top-selling products
+
+Order status distribution
+
+2️⃣ Customer Analysis
+
+Active customers
+
+Repeat customers
+
+City-wise customer distribution
+
+Registration trends
+
+3️⃣ Product & Inventory Analysis
+
+Product-wise sales volume
+
+Low-stock products
+
+Category-wise revenue
+
+High-rated products (from MongoDB reviews)
+
+🧮 Sample Analytical Queries
+Total Revenue (MySQL)
+SELECT 
+    SUM(quantity * unit_price) AS total_revenue
+FROM sales
+WHERE status = 'Completed';
+
+Monthly Sales Trend
+SELECT 
+    DATE_FORMAT(transaction_date, '%Y-%m') AS month,
+    SUM(quantity * unit_price) AS monthly_revenue
+FROM sales
+WHERE status = 'Completed'
+GROUP BY month
+ORDER BY month;
+
+📈 MongoDB Analytics
+Average Rating per Product
+db.products_catalog.aggregate([
+  { $unwind: "$reviews" },
+  {
+    $group: {
+      _id: "$product_id",
+      avg_rating: { $avg: "$reviews.rating" }
+    }
+  }
+])
+
+Top Reviewed Products
+db.products_catalog.find(
+  {},
+  { name: 1, reviews: { $size: "$reviews" } }
+)
+
+📄 Reports Generated
+Report	Description
+Sales Summary	Revenue and order statistics
+Customer Insights	Customer activity and location
+Product Performance	Sales vs ratings
+Inventory Status	Low-stock alerts
+🔍 Data Validation Checks
+
+Orphan sales records reviewed
+
+Revenue calculations validated
+
+Cross-system consistency checks
+
+Review-to-product mapping verified
+
+🛠️ Tools Used
+
+MySQL
+
+MongoDB
+
+SQL
+
+MongoDB Aggregation Framework
+
+Python (optional for reporting)
+
+📌 Business Impact
+
+Identifies high-performing products
+
+Highlights underperforming inventory
+
+Supports pricing and stocking decisions
+
+Enables customer behavior analysis
+
+🔮 Future Enhancements
+
+Create dashboards using Power BI / Tableau
+
+Automate reporting with scheduled jobs
+
+Add predictive sales forecasting
+
+Integrate real-time analytics
+
+👤 Author
+
+Pawan Kulmi
